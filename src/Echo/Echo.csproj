@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +42,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Addresses\LocalAddressResolver.cs" />
+    <Compile Include="Attributes\ServiceTimeoutAttribute.cs" />
+    <Compile Include="Attributes\StreamingServiceAttribute.cs" />
+    <Compile Include="Contexts\LocalServicesContext.cs" />
+    <Compile Include="Diagnostics\DiagnosticService.cs" />
+    <Compile Include="Diagnostics\IDiagnosticService.cs" />
+    <Compile Include="Factories\ClientFactory.cs" />
+    <Compile Include="Factories\DuplexClientFactory.cs" />
+    <Compile Include="Factories\StreamingClientFactory.cs" />
+    <Compile Include="Helpers\ServicesHelper.cs" />
+    <Compile Include="Hosting\ServicesHostManager.cs" />
+    <Compile Include="Interfaces\IAddressResolver.cs" />
+    <Compile Include="Interfaces\IClientFactory.cs" />
+    <Compile Include="Interfaces\IDuplexClientFactory.cs" />
+    <Compile Include="Interfaces\IDuplexServiceProxy.cs" />
+    <Compile Include="Interfaces\IServiceProxy.cs" />
+    <Compile Include="Interfaces\IServicesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxies\DuplexServiceProxy.cs" />
+    <Compile Include="Proxies\ServiceProxy.cs" />
+    <Compile Include="Proxies\ServiceProxyBase.cs" />
+    <Compile Include="Helpers\DataContractHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
