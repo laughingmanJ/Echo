@@ -1,4 +1,5 @@
-﻿using System.ServiceModel.Channels;
+﻿using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Echo.Interfaces
 {
@@ -16,35 +17,14 @@ namespace Echo.Interfaces
         /// <returns>Address of service.</returns>
         string GetServiceAddress<T>();
 
-        /// <summary>
-        /// Checks to see if Services are running.
-        /// </summary>
-        /// <returns>Value indicating that services are up and running.</returns>
-        bool IsServicesRunning();
 
-        /// <summary>
-        /// Creates a WCF client binding based on the CWDS services configuration.
-        /// </summary>
-        /// <returns>WCF Binding.</returns>
-        Binding CreateClientBinding();
+        ServiceHost CreateServiceHost<TContract, TServiceType>()
+            where TContract : class
+            where TServiceType : TContract;
 
-        /// <summary>
-        /// Creates a WCF streaming service binding based on the CWDS services configuration.
-        /// </summary>
-        /// <returns>WCF Binding.</returns>
-        Binding CreateStreamingServiceBinding();
-
-        /// <summary>
-        /// Creates a WCF streaming client binding based on the CWDS services configuration.
-        /// </summary>
-        /// <returns>WCF Binding.</returns>
-        Binding CreateStreamingClientBinding();
-
-        /// <summary>
-        /// Creates a WCF service binding based on the CWDS services configuration.
-        /// </summary>
-        /// <returns>WCF Binding.</returns>
-        Binding CreateServiceBinding();
+        ServiceHost CreateServiceHost<TContract, TServiceType>(TServiceType instance)
+            where TContract : class
+            where TServiceType : TContract;
 
         #endregion
     }

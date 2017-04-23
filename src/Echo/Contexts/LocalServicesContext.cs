@@ -1,7 +1,10 @@
 ﻿using Echo.Addresses;
 using Echo.Diagnostics;
+using Echo.Factories;
+using Echo.Helpers;
 using Echo.Interfaces;
 using Echo.Proxies;
+using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
@@ -10,7 +13,7 @@ namespace Echo.Contexts
     /// <summary>
     /// Services context for WCF Named Piped Services.
     /// </summary>
-    public sealed class LocalServicesContext : IServicesContext
+    public sealed class LocalServicesContext : IServicesContext, IClientContext
     {
         #region Constants
 
@@ -68,11 +71,11 @@ namespace Echo.Contexts
             {
                 var binding = CreateServiceBinding();
                 var serviceAddress = GetServiceAddress<IDiagnosticService>();
+                var channelFactory = new ChannelFactory<IDiagnosticService>(binding, new EndpointAddress(serviceAddress));
 
                 // Setup direct service channel proxy to make service calls.
-                using (var serviceProxy = new ServiceProxy<IDiagnosticService>(binding, serviceAddress))
+                using (var serviceProxy = new ServiceProxy<IDiagnosticService, ChannelFactory<IDiagnosticService>>(channelFactory))
                 {
-                    serviceProxy.InitializeChannel();
                     serviceProxy.Channel.Ping();
                     return true;
                 }
@@ -83,13 +86,72 @@ namespace Echo.Contexts
             }
         }
 
-        public Binding CreateClientBinding()
+
+        #endregion
+
+        public IClientFactory<T> CreateFactory<T>()
+            where T : class
+        {
+            var binding = ServicesHelper.IsStreamingService(typeof(T)) ? CreateStreamingClientBinding() : CreateClientBinding();
+            var address = GetServiceAddress<T>();
+
+            return new ClientFactory<T>(binding, address);
+        }
+
+        public IClientFactory<T> CreateDuplexFactory<T, TCallback>(TCallback callback)
+            where T : class
+            where TCallback : class
+        {
+            var binding = CreateClientBinding();
+            var address = GetServiceAddress<T>();
+
+            return new DuplexClientFactory<T, TCallback>(binding, address, callback);
+        }
+
+        ServiceHost IServicesContext.CreateServiceHost<TContract,TServiceType>()
+        {
+            var address = GetServiceAddress<TContract>();
+            var serviceHost = new ServiceHost(typeof(TServiceType), new Uri(address));
+            ConfigureServiceHost<TContract>(serviceHost);
+
+            return serviceHost;
+        }
+
+        ServiceHost IServicesContext.CreateServiceHost<TContract, TServiceType>(TServiceType instance)
+        {
+            var address = GetServiceAddress<TContract>();
+            var serviceHost = new ServiceHost(instance, new Uri(address));
+            ConfigureServiceHost<TContract>(serviceHost);
+
+            return serviceHost;
+        }
+
+        private void ConfigureServiceHost<TContract>(ServiceHost serviceHost)
+            where TContract : class
+        {
+            var serviceType = typeof(TContract);
+
+            // Get the appropriate binding based on if the service is a normal service or a streaming service.
+            var binding = ServicesHelper.IsStreamingService(serviceType) ? CreateStreamingServiceBinding()
+                : CreateServiceBinding();
+
+            // If the service type is marked with timeout attribute, set binding’s receive timeout to that value.
+            if (ServicesHelper.HasTimeOutAttribute(serviceType))
+            {
+                binding.ReceiveTimeout = ServicesHelper.GetTimeout(serviceType);
+            }
+
+            serviceHost.AddServiceEndpoint(serviceType, binding, string.Empty);
+        }
+
+
+        private Binding CreateClientBinding()
         {
             var binding = new NetNamedPipeBinding();
             return binding;
         }
 
-        public Binding CreateStreamingServiceBinding()
+        private Binding CreateStreamingServiceBinding()
         {
             var binding = new NetNamedPipeBinding
             {
@@ -102,7 +164,7 @@ namespace Echo.Contexts
             return binding;
         }
 
-        public Binding CreateStreamingClientBinding()
+        private Binding CreateStreamingClientBinding()
         {
             var binding = new NetNamedPipeBinding
             {
@@ -117,7 +179,7 @@ namespace Echo.Contexts
         /// Creates a WCF service binding based on the CWDS services configuration.
         /// </summary>
         /// <returns>WCF Binding.</returns>
-        public Binding CreateServiceBinding()
+        private Binding CreateServiceBinding()
         {
             var binding = new NetNamedPipeBinding
             {
@@ -126,7 +188,5 @@ namespace Echo.Contexts
             };
             return binding;
         }
-
-        #endregion
     }
 }
