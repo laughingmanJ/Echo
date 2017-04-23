@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Echo.Proxies
 {
@@ -59,7 +55,6 @@ namespace Echo.Proxies
             Channel = _channelFactory.CreateChannel();
 
             // Assign internal events to monitor failure and channel opening.
-            ((IChannel)Channel).Opened += ChannelOpened;
             ((IChannel)Channel).Closed += ChannelClosed;
             ((IChannel)Channel).Faulted += ChannelFaulted;
         }
@@ -85,18 +80,6 @@ namespace Echo.Proxies
 
         #region Event Handlers
 
-        /// <summary>
-        /// Occurs when the service channel opens.
-        /// </summary>
-        /// <param name="sender">Channel</param>
-        /// <param name="e">Empty event args.</param>
-        protected virtual void ChannelOpened(object sender, EventArgs e)
-        {
-            if (Connected != null)
-            {
-                Connected(this, EventArgs.Empty);
-            }
-        }
 
         /// <summary>
         /// Occurs when the channel enters a faulted state and then attempts to reinitialize
@@ -113,9 +96,6 @@ namespace Echo.Proxies
             // Shutdown the channel factory.
             _channelFactory.Close();
 
-            // Notify any event subscribers that the channel has failed and was reinitialized.  
-            if (null != ChannelFailure)
-                ChannelFailure(this, new EventArgs());
         }
 
         /// <summary>
@@ -125,11 +105,6 @@ namespace Echo.Proxies
         /// <param name="e">Empty event args.</param>
         protected virtual void ChannelClosed(object sender, EventArgs e)
         {
-            if (Disconnected != null)
-            {
-                Disconnected(this, EventArgs.Empty);
-            }
-
             // Recreate the channel factory and channel again for future connections.
             InitializeChannel();
         }
@@ -152,24 +127,5 @@ namespace Echo.Proxies
             else if (CommunicationState.Closed != clientChannel.State)
                 clientChannel.Close();
         }
-
-        #region IConnectionEvents Events
-
-        /// <summary>
-        /// Occurs when a communication object transitions into the faulted state. 
-        /// </summary>
-        public event EventHandler ChannelFailure;
-
-        /// <summary>
-        /// Event handler for channel opened and connected operations. 
-        /// </summary>
-        public event EventHandler Connected;
-
-        /// <summary>
-        /// Event handler for channel closing operations. 
-        /// </summary>
-        public event EventHandler Disconnected;
-
-        #endregion
     }
 }
