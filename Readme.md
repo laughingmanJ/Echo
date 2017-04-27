@@ -1,0 +1,2 @@
+# ECHO
+WCF Library for programmatically working with names piped interprocess communications between separate applications on the Windows desktop that offers simple configuration for both desktop client and server apps.
