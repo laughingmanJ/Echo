@@ -19,6 +19,8 @@ namespace Echo.Contexts
 
         private const int MaxBufferSize = 2147483647;
 
+        private const string ProtocolAddress = @"net.pipe://";
+
         #endregion
 
         #region Fields
@@ -87,7 +89,41 @@ namespace Echo.Contexts
         }
 
 
+        /// <summary>
+        /// Creates a service host based on the service contract and type.
+        /// </summary>
+        /// <typeparam name="TContract">A service contract.</typeparam>
+        /// <typeparam name="TService">A service type that implements the contract.</typeparam>
+        /// <param name="instance"></param>
+        /// <returns>Service host.</returns>
+        ServiceHost IServicesContext.CreateServiceHost<TContract, TService>()
+        {
+            var address = GetServiceAddress<TContract>();
+            var serviceHost = new ServiceHost(typeof(TService), new Uri(address));
+            ConfigureServiceHost<TContract>(serviceHost);
+
+            return serviceHost;
+        }
+
+        /// <summary>
+        /// Creates a service host based on the service contract and an service instance.
+        /// </summary>
+        /// <typeparam name="TContract">A service contract.</typeparam>
+        /// <typeparam name="TService">A service type that implements the contract.</typeparam>
+        /// <param name="instance"></param>
+        /// <returns>Service host.</returns>
+        ServiceHost IServicesContext.CreateServiceHost<TContract, TService>(TService instance)
+        {
+            var address = GetServiceAddress<TContract>();
+            var serviceHost = new ServiceHost(instance, new Uri(address));
+            ConfigureServiceHost<TContract>(serviceHost);
+
+            return serviceHost;
+        }
+
         #endregion
+
+        #region IClientContext Methods
 
         public IClientFactory<T> CreateFactory<T>()
             where T : class
@@ -108,23 +144,9 @@ namespace Echo.Contexts
             return new DuplexClientFactory<T, TCallback>(binding, address, callback);
         }
 
-        ServiceHost IServicesContext.CreateServiceHost<TContract,TServiceType>()
-        {
-            var address = GetServiceAddress<TContract>();
-            var serviceHost = new ServiceHost(typeof(TServiceType), new Uri(address));
-            ConfigureServiceHost<TContract>(serviceHost);
+        #endregion
 
-            return serviceHost;
-        }
-
-        ServiceHost IServicesContext.CreateServiceHost<TContract, TServiceType>(TServiceType instance)
-        {
-            var address = GetServiceAddress<TContract>();
-            var serviceHost = new ServiceHost(instance, new Uri(address));
-            ConfigureServiceHost<TContract>(serviceHost);
-
-            return serviceHost;
-        }
+        #region Private Methods
 
         private void ConfigureServiceHost<TContract>(ServiceHost serviceHost)
             where TContract : class
@@ -188,5 +210,7 @@ namespace Echo.Contexts
             };
             return binding;
         }
+
+        #endregion
     }
 }

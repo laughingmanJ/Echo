@@ -43,7 +43,7 @@ namespace Echo.Helpers
 
         public static string SerializeListToXmlString<T>(IEnumerable<T> stringCollection)
         {
-            using (var stringWriter = new StringWriter())
+            var stringWriter = new StringWriter();
             using (var xmlWriter = new XmlTextWriter(stringWriter))
             {
                 var xmlSerializer = new XmlSerializer(typeof(List<T>));
@@ -54,8 +54,7 @@ namespace Echo.Helpers
 
         public static IEnumerable<T> SerializeListFromXmlString<T>(string stringCollectionXml)
         {
-            using (var stringReader = new StringReader(stringCollectionXml))
-            using (var xmlReader = new XmlTextReader(stringReader))
+            using (var xmlReader = new XmlTextReader(new StringReader(stringCollectionXml)))
             {
                 var xmlSerializer = new XmlSerializer(typeof(List<T>));
                 return (IEnumerable<T>)xmlSerializer.Deserialize(xmlReader);

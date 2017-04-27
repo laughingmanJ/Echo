@@ -5,16 +5,16 @@ namespace Echo.Interfaces
     /// <summary>
     /// Service proxy interface for calling service operations.
     /// </summary>
-    /// <typeparam name="T">Service contract.</typeparam>
-    public interface IServiceProxy<out T> : IDisposable
-        where T : class
+    /// <typeparam name="TContract">Service contract.</typeparam>
+    public interface IServiceProxy<out TContract> : IDisposable
+        where TContract : class
     {
         #region Methods
 
         /// <summary>
         /// Service operations channel.
         /// </summary>
-        T Channel { get; }
+        TContract Channel { get; }
 
         #endregion
     }

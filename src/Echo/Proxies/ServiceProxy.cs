@@ -8,26 +8,26 @@ namespace Echo.Proxies
     /// <summary>
     /// Base class that contains common operations shared by channel proxies.
     /// </summary>
-    /// <typeparam name="T">Service contract.</typeparam>
-    /// <typeparam name="TR">Channel factory type</typeparam>
-    class ServiceProxy<T, TR> : IServiceProxy<T>
-        where T : class
-        where TR : ChannelFactory<T>
+    /// <typeparam name="TContract">Service contract.</typeparam>
+    /// <typeparam name="TChannelFactory">Channel factory type</typeparam>
+    class ServiceProxy<TContract, TChannelFactory> : IServiceProxy<TContract>
+        where TContract : class
+        where TChannelFactory : ChannelFactory<TContract>
     {
 
         /// <summary>
         /// Channel for conducting service calls.
         /// </summary>
-        public T Channel { get; private set; }
+        public TContract Channel { get; private set; }
 
 
         /// <summary>
         /// Channel factory for creating service channels.
         /// </summary>
-        private TR _channelFactory;
+        private TChannelFactory _channelFactory;
 
 
-        public ServiceProxy(TR channelFactory)
+        public ServiceProxy(TChannelFactory channelFactory)
         {
             _channelFactory = channelFactory;
             InitializeChannel();
@@ -83,7 +83,7 @@ namespace Echo.Proxies
         /// Closes channel properly.
         /// </summary>
         /// <param name="channel">Channel to close</param>
-        private static void CloseChannel(T channel)
+        private static void CloseChannel(TContract channel)
         {
             if (null == channel) return;
 

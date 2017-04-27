@@ -3,9 +3,9 @@
     /// <summary>
     /// Factory for creating a proxy client for standard service.
     /// </summary>
-    /// <typeparam name="T">Service contract type.</typeparam>
-    public interface IClientFactory<out T>
-        where T : class
+    /// <typeparam name="TContract">Service contract type.</typeparam>
+    public interface IClientFactory<out TContract>
+        where TContract : class
     {
         #region Methods
 
@@ -13,7 +13,7 @@
         /// Creates a service proxy for connecting and using a service.
         /// </summary>
         /// <returns>Service proxy.</returns>
-        IServiceProxy<T> Create();
+        IServiceProxy<TContract> Create();
 
         #endregion
     }

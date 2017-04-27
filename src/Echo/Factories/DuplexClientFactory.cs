@@ -8,11 +8,11 @@ namespace Echo.Factories
     /// <summary>
     /// Factory for creating duplex service proxies
     /// </summary>
-    /// <typeparam name="T">Service contract.</typeparam>
-    /// <typeparam name="TR">Callback contract.</typeparam>
-    sealed class DuplexClientFactory<T, TR> : IClientFactory<T>
-        where T : class
-        where TR : class
+    /// <typeparam name="TContract">Service contract.</typeparam>
+    /// <typeparam name="TCallback">Callback contract.</typeparam>
+    sealed class DuplexClientFactory<TContract, TCallback> : IClientFactory<TContract>
+        where TContract : class
+        where TCallback : class
     {
         #region Fields
 
@@ -21,7 +21,7 @@ namespace Echo.Factories
         private readonly string _address;
 
         // Factory for creating a callback client.
-        private readonly TR _callback;
+        private readonly TCallback _callback;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace Echo.Factories
         /// </summary>
         /// <param name="servicesContext">Service context.</param>
         /// <param name="callback">Callback client factory.</param>
-        public DuplexClientFactory(Binding binding, string address, TR callback)
+        public DuplexClientFactory(Binding binding, string address, TCallback callback)
         {
             _binding = binding;
             _address = address;
@@ -47,11 +47,11 @@ namespace Echo.Factories
         /// Creates a duplex service proxy for connecting and using a service.
         /// </summary>
         /// <returns>Service proxy.</returns>
-        public IServiceProxy<T> Create()
+        public IServiceProxy<TContract> Create()
         {
 
-            var channelFactory = new DuplexChannelFactory<T>(_callback, _binding, new EndpointAddress(_address));
-            var serviceProxy = new ServiceProxy<T, DuplexChannelFactory<T>>(channelFactory);
+            var channelFactory = new DuplexChannelFactory<TContract>(_callback, _binding, new EndpointAddress(_address));
+            var serviceProxy = new ServiceProxy<TContract, DuplexChannelFactory<TContract>>(channelFactory);
 
             return serviceProxy;
         }

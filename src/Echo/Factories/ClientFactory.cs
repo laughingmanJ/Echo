@@ -8,9 +8,9 @@ namespace Echo.Factories
     /// <summary>
     /// Factory for creating service proxies of a specific service contract. 
     /// </summary>
-    /// <typeparam name="T">Service contract (Interface).</typeparam>
-    class ClientFactory<T> : IClientFactory<T>
-        where T : class
+    /// <typeparam name="TContract">Service contract (Interface).</typeparam>
+    class ClientFactory<TContract> : IClientFactory<TContract>
+        where TContract : class
     {
         #region Fields
 
@@ -33,10 +33,10 @@ namespace Echo.Factories
 
         #region IClientFactory<T> Methods
 
-        public IServiceProxy<T> Create()
+        public IServiceProxy<TContract> Create()
         {
-            var channelFactory = new ChannelFactory<T>(_binding, new EndpointAddress(_address));
-            var serviceProxy = new ServiceProxy<T, ChannelFactory<T>>(channelFactory);
+            var channelFactory = new ChannelFactory<TContract>(_binding, new EndpointAddress(_address));
+            var serviceProxy = new ServiceProxy<TContract, ChannelFactory<TContract>>(channelFactory);
 
             // Setup direct service channel proxy to make service calls.
             return serviceProxy;

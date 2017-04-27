@@ -14,11 +14,16 @@ namespace Echo.Interfaces
         /// <returns>Value indicating that services are up and running.</returns>
         bool IsServicesRunning();
 
-        IClientFactory<T> CreateFactory<T>()
-            where T : class;
+        /// <summary>
+        /// Creates a service proxy factory for a service contract.
+        /// </summary>
+        /// <typeparam name="TContract">Service contract.</typeparam>
+        /// <returns>Service proxy factory/returns>
+        IClientFactory<TContract> CreateFactory<TContract>()
+            where TContract : class;
 
-        IClientFactory<T> CreateDuplexFactory<T, TCallback>(TCallback callback)
-            where T : class
+        IClientFactory<TContract> CreateDuplexFactory<TContract, TCallback>(TCallback callback)
+            where TContract : class
             where TCallback : class;
     }
 }

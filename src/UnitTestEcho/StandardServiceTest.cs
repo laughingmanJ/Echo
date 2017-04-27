@@ -1,7 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Echo.Contexts;
 using Echo.Hosting;
-using Echo.Contexts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UnitTestEcho.Contracts;
+using UnitTestEcho.Services;
 
 namespace UnitTestEcho
 {
@@ -17,6 +18,8 @@ namespace UnitTestEcho
         {
             var context = new LocalServicesContext(BaseAddress);
             _servicesHostManager = new ServicesHostManager(context);
+
+            _servicesHostManager.RegisterService<IStandardService, StandardService>();
             _servicesHostManager.StartServices();
         }
 
@@ -27,8 +30,57 @@ namespace UnitTestEcho
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void Call_Single_Operation()
         {
+            var context = new LocalServicesContext(BaseAddress);
+            var factory = context.CreateFactory<IStandardService>();
+
+            using (var proxy = factory.Create())
+            {
+                var value = proxy.Channel.GetStringValue();
+                Assert.AreEqual("TestValue", value);
+            }
+        }
+
+        [TestMethod]
+        public void Call_Single_Operation_With_Parameters()
+        {
+            const int Value1 = 56;
+            const double Value2 = 134.11;
+            const string Value3 = "Foo";
+
+            var context = new LocalServicesContext(BaseAddress);
+            var factory = context.CreateFactory<IStandardService>();
+
+            using (var proxy = factory.Create())
+            {
+                var value = proxy.Channel.SetValues(Value1, Value2, Value3);
+                Assert.AreEqual(string.Format("{0},{1},{2}", Value1, Value2, Value3), value);
+            }
+        }
+
+        [TestMethod]
+        public void Call_Single_Operation_LongRunning()
+        {
+            var context = new LocalServicesContext(BaseAddress);
+            var factory = context.CreateFactory<IStandardService>();
+
+            using (var proxy = factory.Create())
+            {
+                proxy.Channel.SetValueLongRunning(34);
+            }
+        }
+
+        [TestMethod]
+        public void Call_Single_Operation_OneWay()
+        {
+            var context = new LocalServicesContext(BaseAddress);
+            var factory = context.CreateFactory<IStandardService>();
+
+            using (var proxy = factory.Create())
+            {
+                proxy.Channel.SetValue(11);
+            }
         }
     }
 }

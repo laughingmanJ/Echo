@@ -11,20 +11,34 @@ namespace Echo.Interfaces
         #region Methods
 
         /// <summary>
-        /// Gets the named pipe address of a service.
+        /// Gets the named pipe address of a service based on its contract name.
         /// </summary>
-        /// <typeparam name="T">A service contract.</typeparam>
+        /// <typeparam name="TContract">A service contract.</typeparam>
         /// <returns>Address of service.</returns>
-        string GetServiceAddress<T>();
+        string GetServiceAddress<TContract>();
 
 
-        ServiceHost CreateServiceHost<TContract, TServiceType>()
+        /// <summary>
+        /// Creates a service host based on the service contract and type.
+        /// </summary>
+        /// <typeparam name="TContract">A service contract.</typeparam>
+        /// <typeparam name="TService">A service type that implements the contract.</typeparam>
+        /// <param name="instance"></param>
+        /// <returns>Service host.</returns>
+        ServiceHost CreateServiceHost<TContract, TService>()
             where TContract : class
-            where TServiceType : TContract;
+            where TService : TContract;
 
-        ServiceHost CreateServiceHost<TContract, TServiceType>(TServiceType instance)
+        /// <summary>
+        /// Creates a service host based on the service contract and an service instance.
+        /// </summary>
+        /// <typeparam name="TContract">A service contract.</typeparam>
+        /// <typeparam name="TService">A service type that implements the contract.</typeparam>
+        /// <param name="instance"></param>
+        /// <returns>Service host.</returns>
+        ServiceHost CreateServiceHost<TContract, TService>(TService instance)
             where TContract : class
-            where TServiceType : TContract;
+            where TService : TContract;
 
         #endregion
     }

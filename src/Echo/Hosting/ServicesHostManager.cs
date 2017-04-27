@@ -49,38 +49,38 @@ namespace Echo.Hosting
         /// <summary>
         /// Add a new service based on blueprint class(factory implementation).
         /// </summary>
-        /// <typeparam name="T">Service contract.</typeparam>
-        /// <typeparam name="TR">Class implementing service contract.</typeparam>
+        /// <typeparam name="TContract">Service contract.</typeparam>
+        /// <typeparam name="TService">Class implementing service contract.</typeparam>
         // Cannot be parameter T like ReSharper wants because parameter T is used for the class.
-        public void RegisterService<T, TR>()
-            where T : class
-            where TR : T
+        public void RegisterService<TContract, TService>()
+            where TContract : class
+            where TService : TContract
         {
-            var serviceType = typeof(T);
+            var serviceType = typeof(TContract);
 
             if (_hostedServices.ContainsKey(serviceType))
-                throw new Exception(string.Format("Services manager is already hosting service contract {0}.", typeof(T).Name));
+                throw new Exception(string.Format("Services manager is already hosting service contract {0}.", typeof(TContract).Name));
 
-            var serviceHost = _servicesContext.CreateServiceHost<T, TR>();
+            var serviceHost = _servicesContext.CreateServiceHost<TContract, TService>();
             _hostedServices.Add(serviceType, serviceHost);
         }
 
         /// <summary>
         /// Add a new service based on implemented class(singleton implementation).
         /// </summary>
-        /// <typeparam name="T">Service contract.</typeparam>
-        /// <typeparam name="TR">Class implementing service contract.</typeparam>
+        /// <typeparam name="TContract">Service contract.</typeparam>
+        /// <typeparam name="TService">Class implementing service contract.</typeparam>
         /// <param name="serviceInstance">Instantiated service.</param>
-        public void RegisterService<T, TR>(TR serviceInstance)
-            where T : class
-            where TR : T
+        public void RegisterService<TContract, TService>(TService serviceInstance)
+            where TContract : class
+            where TService : TContract
         {
-            var serviceType = typeof(T);
+            var serviceType = typeof(TContract);
 
             if (_hostedServices.ContainsKey(serviceType))
-                throw new Exception(string.Format("Services manager is already hosting service contract {0}.", typeof(T).Name));
+                throw new Exception(string.Format("Services manager is already hosting service contract {0}.", typeof(TContract).Name));
 
-            var serviceHost = _servicesContext.CreateServiceHost<T, TR>(serviceInstance);
+            var serviceHost = _servicesContext.CreateServiceHost<TContract, TService>(serviceInstance);
             _hostedServices.Add(serviceType, serviceHost);
         }
 
