@@ -2,6 +2,7 @@
 
 namespace Echo.Attributes
 {
+
     /// <summary>
     /// Attribute for expressing timeout on a service contract (Interface). 
     /// </summary>

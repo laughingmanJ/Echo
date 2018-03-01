@@ -2,7 +2,10 @@
 
 namespace Echo.Addresses
 {
-    public class LocalAddressResolver : IAddressResolver
+    /// <summary>
+    /// Represents an address resolver for resolving service addresses.
+    /// </summary>
+    public class AddressResolver : IAddressResolver
     {
         #region Fields
 
@@ -17,7 +20,7 @@ namespace Echo.Addresses
         /// Initializes class with base service address.
         /// </summary>
         /// <param name="baseAddress">Base service address.</param>
-        public LocalAddressResolver(string baseAddress)
+        public AddressResolver(string baseAddress)
         {
             _baseAddress = baseAddress;
         }

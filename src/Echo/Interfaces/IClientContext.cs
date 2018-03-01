@@ -18,10 +18,17 @@ namespace Echo.Interfaces
         /// Creates a service proxy factory for a service contract.
         /// </summary>
         /// <typeparam name="TContract">Service contract.</typeparam>
-        /// <returns>Service proxy factory/returns>
+        /// <returns>Service proxy factory.</returns>
         IClientFactory<TContract> CreateFactory<TContract>()
             where TContract : class;
 
+        /// <summary>
+        /// Creates a duplex (two-way calling) service proxy factory for a service contract.
+        /// </summary>
+        /// <typeparam name="TContract">Service contract.<</typeparam>
+        /// <typeparam name="TCallback">Callback contract.</typeparam>
+        /// <param name="callback"></param>
+        /// <returns>Service proxy factory.</returns>
         IClientFactory<TContract> CreateDuplexFactory<TContract, TCallback>(TCallback callback)
             where TContract : class
             where TCallback : class;

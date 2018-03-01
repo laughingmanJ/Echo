@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addresses\LocalAddressResolver.cs" />
+    <Compile Include="Addresses\AddressResolver.cs" />
     <Compile Include="Attributes\ServiceTimeoutAttribute.cs" />
     <Compile Include="Attributes\StreamingServiceAttribute.cs" />
-    <Compile Include="Contexts\LocalServicesContext.cs" />
+    <Compile Include="Contexts\ServicesContext.cs" />
     <Compile Include="Diagnostics\DiagnosticService.cs" />
     <Compile Include="Diagnostics\IDiagnosticService.cs" />
     <Compile Include="Factories\ClientFactory.cs" />

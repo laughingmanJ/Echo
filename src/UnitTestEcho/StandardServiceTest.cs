@@ -9,14 +9,14 @@ namespace UnitTestEcho
     [TestClass]
     public class StandardServiceTest
     {
-        private const string BaseAddress = @"net.pipe://localhost/Testing/StandardServiceTest/";
+        private const string BaseAddress = @"Testing/StandardServiceTest";
 
         private static ServicesHostManager _servicesHostManager;
 
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             _servicesHostManager = new ServicesHostManager(context);
 
             _servicesHostManager.RegisterService<IStandardService, StandardService>();
@@ -32,7 +32,7 @@ namespace UnitTestEcho
         [TestMethod]
         public void Call_Single_Operation()
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             var factory = context.CreateFactory<IStandardService>();
 
             using (var proxy = factory.Create())
@@ -49,7 +49,7 @@ namespace UnitTestEcho
             const double Value2 = 134.11;
             const string Value3 = "Foo";
 
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             var factory = context.CreateFactory<IStandardService>();
 
             using (var proxy = factory.Create())
@@ -62,7 +62,7 @@ namespace UnitTestEcho
         [TestMethod]
         public void Call_Single_Operation_LongRunning()
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             var factory = context.CreateFactory<IStandardService>();
 
             using (var proxy = factory.Create())
@@ -74,7 +74,7 @@ namespace UnitTestEcho
         [TestMethod]
         public void Call_Single_Operation_OneWay()
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             var factory = context.CreateFactory<IStandardService>();
 
             using (var proxy = factory.Create())

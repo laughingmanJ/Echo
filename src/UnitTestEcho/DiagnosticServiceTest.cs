@@ -14,7 +14,7 @@ namespace UnitTestEcho
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             _servicesHostManager = new ServicesHostManager(context);
             _servicesHostManager.StartServices();
         }
@@ -28,7 +28,7 @@ namespace UnitTestEcho
         [TestMethod]
         public void IsServicesRunning()
         {
-            var context = new LocalServicesContext(BaseAddress);
+            var context = new ServicesContext(BaseAddress);
             Assert.IsTrue(context.IsServicesRunning(), "Diagnostic service is not running.");
         }
     }

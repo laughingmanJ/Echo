@@ -13,13 +13,12 @@ namespace Echo.Contexts
     /// <summary>
     /// Services context for WCF Named Piped Services.
     /// </summary>
-    public sealed class LocalServicesContext : IServicesContext, IClientContext
+    public sealed class ServicesContext : IServicesContext, IClientContext
     {
         #region Constants
 
+        // Max buffer size for transmitting and receiving data in WCF services. 
         private const int MaxBufferSize = 2147483647;
-
-        private const string ProtocolAddress = @"net.pipe://";
 
         #endregion
 
@@ -36,16 +35,22 @@ namespace Echo.Contexts
         /// Initializes the context with a simple base address.
         /// </summary>
         /// <param name="baseAddress">Base address for services.</param>
-        public LocalServicesContext(string baseAddress)
+        public ServicesContext(string baseAddress)
         {
-            _addressResolver = new LocalAddressResolver(baseAddress);
+            if(string.IsNullOrEmpty(baseAddress))
+            {
+                throw new ArgumentNullException("baseAddress");
+            }
+
+            var fullAddress = string.Format("net.pipe://localhost/{0}/", baseAddress);
+            _addressResolver = new AddressResolver(fullAddress);
         }
 
         /// <summary>
         /// Initializes class with services base address and the CWDS.exe application path.
         /// </summary>
         /// <param name="addressResolver"></param>
-        public LocalServicesContext(IAddressResolver addressResolver)
+        public ServicesContext(IAddressResolver addressResolver)
         {
             _addressResolver = addressResolver;
         }
@@ -125,6 +130,12 @@ namespace Echo.Contexts
 
         #region IClientContext Methods
 
+
+        /// <summary>
+        /// Creates a service proxy factory for a service contract.
+        /// </summary>
+        /// <typeparam name="TContract">Service contract.</typeparam>
+        /// <returns>Service proxy factory/returns>
         public IClientFactory<T> CreateFactory<T>()
             where T : class
         {
@@ -134,6 +145,13 @@ namespace Echo.Contexts
             return new ClientFactory<T>(binding, address);
         }
 
+        /// <summary>
+        /// Creates a duplex (two-way calling) service proxy factory for a service contract.
+        /// </summary>
+        /// <typeparam name="TContract">Service contract.<</typeparam>
+        /// <typeparam name="TCallback">Callback contract.</typeparam>
+        /// <param name="callback"></param>
+        /// <returns>Service proxy factory.</returns>
         public IClientFactory<T> CreateDuplexFactory<T, TCallback>(TCallback callback)
             where T : class
             where TCallback : class

@@ -14,7 +14,7 @@ namespace Echo.Hosting
         #region Fields
 
         // Services context.
-        protected readonly IServicesContext _servicesContext;
+        private readonly IServicesContext _servicesContext;
 
         /// <summary>
         /// Collection of ServiceHosts
