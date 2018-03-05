@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echo", "Echo\Echo.csproj", "{A57861E3-8163-4D0D-9E8E-C4CA4E760E8E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BC225F0-E262-4E2C-BBFB-82B3C0E4D144}"
 	ProjectSection(SolutionItems) = preProject
-		..\build\Echo.snk = ..\build\Echo.snk
+		build\Echo.snk = build\Echo.snk
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEcho", "..\test\TestEcho\TestEcho.csproj", "{74B5C804-62AD-40BE-A8DE-56172E38B023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echo", "src\Echo\Echo.csproj", "{A57861E3-8163-4D0D-9E8E-C4CA4E760E8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEcho", "test\TestEcho\TestEcho.csproj", "{74B5C804-62AD-40BE-A8DE-56172E38B023}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
