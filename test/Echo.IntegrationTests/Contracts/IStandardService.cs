@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace UnitTestEcho.Contracts
+namespace Echo.IntegrationTests.Contracts
 {
     [ServiceContract]
     public interface IStandardService

@@ -1,10 +1,10 @@
 ﻿using Echo.Contexts;
 using Echo.Hosting;
+using Echo.IntegrationTests.Contracts;
+using Echo.IntegrationTests.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UnitTestEcho.Contracts;
-using UnitTestEcho.Services;
 
-namespace UnitTestEcho
+namespace Echo.IntegrationTestsUnitTestEcho
 {
     [TestClass]
     public class StandardServiceTest

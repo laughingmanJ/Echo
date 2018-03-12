@@ -2,7 +2,7 @@
 using Echo.Hosting;
 using Echo.Contexts;
 
-namespace UnitTestEcho
+namespace Echo.IntegrationTests
 {
     [TestClass]
     public class DiagnosticServiceTest

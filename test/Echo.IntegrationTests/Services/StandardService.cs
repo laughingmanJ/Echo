@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Echo.IntegrationTests.Contracts;
+using System;
 using System.Threading;
-using UnitTestEcho.Contracts;
 
-namespace UnitTestEcho.Services
+namespace Echo.IntegrationTests.Services
 {
     public class StandardService : IStandardService
     {
