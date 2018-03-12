@@ -1,2 +1,2 @@
 # ECHO
-WCF Library for programmatically working with names piped interprocess communications between separate applications on the Windows desktop that offers simple configuration for both desktop client and server apps.
+Echo is a .NET Framework library to help rapidly and easily create WCF NetNamedPipe services and clients for cross-process communication between .NET applications on the same machine.
