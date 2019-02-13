@@ -4,7 +4,7 @@ using Echo.IntegrationTests.Contracts;
 using Echo.IntegrationTests.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Echo.IntegrationTestsUnitTestEcho
+namespace Echo.IntegrationTests
 {
     [TestClass]
     public class StandardServiceTest
